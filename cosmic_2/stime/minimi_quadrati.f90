@@ -52,7 +52,7 @@ contains
       write(3,*)  tau_test(i), q(i)
     end do
 
-    print*, tau_min, qmin
+    print*, 'MMQ', tau_min
     call find_error(tau_test,q,step,qmin,tau_min)
   end subroutine MMQ
 

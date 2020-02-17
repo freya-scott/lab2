@@ -12,7 +12,7 @@ contains
     media = sum(array)/size
     sigma = sqrt(media**2/size)
 
-    PRINT*, 'Media dei tempi', media
+    PRINT*, 'MEDIA', media
 
   end subroutine media_array
 
