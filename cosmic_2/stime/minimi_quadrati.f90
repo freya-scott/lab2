@@ -45,6 +45,7 @@ contains
       end if
       write(3,*)  tau_test, q
     end do
+    
     print*, tau_min, qmin
   end subroutine MMQ
 
