@@ -1,0 +1,1 @@
+ plot 'm_q_stimati.txt' u 3:5:4 w err, 0 w l

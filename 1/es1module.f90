@@ -13,22 +13,23 @@ contains
     implicit none
     integer, parameter :: size=5
     integer :: j
-    real(kind=rk), dimension(size) :: V, I, error
+    real(kind=rk), dimension(size) :: V, I, error, errorV
 
     open(unit=1, file='data.txt', action='read')
     do j=1,size
       read(1,*) V(j), I(j), error(j)
+      errorV = V(j)*10/100
     end do
-    call formule(V,I,error,size)
+    call formule(V,I,error,size,errorV)
   end subroutine read_data
 
 
 
-  subroutine formule(V,I,error,size)
+  subroutine formule(V,I,error,sizeerrorV)
     implicit none
     real(kind=rk) :: s00,s10,s01,s20,s11,d
     integer :: size
-    real(kind=rk), dimension(size) :: V, I, error
+    real(kind=rk), dimension(size) :: V, I, error,errorV
 
     s00 = sum(1/error**2)
     s10 = sum(V/error**2)
@@ -49,11 +50,10 @@ contains
     real(kind=rk) :: m,q,sigma_m,sigma_q, cov
     real(kind=rk), dimension(size) :: I,V, error
 
-    m = (s00*s11-s10*s01)/d
     q = (s20*s01-s10*s11)/d
     sigma_m = sqrt(s00/d)
     sigma_q = sqrt(s20/d)
-    cov = s10/d
+    cov = -s10/d
 
     call write_to_file(size,I,V,m,q,error)
   end subroutine stime
@@ -70,9 +70,15 @@ contains
       I_stima(j) = m*V(j)+q
       write(2,*) I(j), I_stima(j), V(j), error(j), I(j)-I_stima(j)
     end do
+    call gnuplot()
   end subroutine write_to_file
 
-!  first graph: gnuplot> plot 'm_q_stimati.txt' u 3:1:4 w err, '' u 3:2 w l
-!  second graph: gnuplot> plot 'm_q_stimati.txt' u 3:5:4 w err, 0 w l
+  subroutine gnuplot()
 
+    open(unit=3, file='A1.txt', action='write')
+    write(3,*) "plot 'm_q_stimati.txt' u 3:1:4 w err, '' u 3:2 w l"
+    open(unit=4, file='A2.txt', action='write')
+    write(4,*) "plot 'm_q_stimati.txt' u 3:5:4 w err, 0 w l"
+
+  end subroutine gnuplot
 end module es1mod
