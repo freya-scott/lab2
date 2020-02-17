@@ -31,4 +31,21 @@ contains
   end subroutine plot_commands_q
 
 
+  subroutine plot_commands_MML(lnL_max,sigma_dx,sigma_sx,tau_max)
+    implicit none
+    real(kind=rk) :: lnL_max, sigma_dx, sigma_sx,tau_max
+    open(unit=9, file='MML.txt', action='write')
+
+    write(9,*) " set title 'Metodo grafico minimi quadrati' "
+    write(9,*) "set xrange[0.03:0.12]"
+    write(9,*) "set yrange[-408:-335]"
+    write(9,*)  " set arrow from " , sigma_sx , " , graph 0 to " , sigma_sx, " , graph 1 nohead "
+    write(9,*)  " set arrow from " , sigma_dx , " , graph 0 to " , sigma_dx, " , graph 1 nohead "
+    write(9,*) " set arrow from " ,tau_max , " , graph 0 to " ,tau_max , " , graph 1 nohead "
+    write(9,*) "plot 'maxlike.txt' u 1:2 w l"
+    write(9,*) "replot", lnL_max
+    write(9,*) "replot", lnL_max-0.5
+
+  end subroutine plot_commands_MML
+
 end module gnuplot

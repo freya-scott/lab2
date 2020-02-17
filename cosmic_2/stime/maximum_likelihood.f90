@@ -1,5 +1,6 @@
 module maximum_likelihood
 use precisione
+use gnuplot
 implicit none
 contains
 
@@ -48,7 +49,7 @@ contains
 
   end function lnL_partial_sum2
 
-!________________________________________________________________
+!________________________________________________________________________________
 
   subroutine MML(nk,nbin,x,size,dx)
     implicit none
@@ -57,7 +58,7 @@ contains
     real(kind=rk), dimension(step) :: tau_test, lnL
     integer, dimension(nbin) :: nk
     real(kind=rk), dimension(nbin+1) :: x
-    real(kind=rk) :: lnL_partial, pk, dx, lnL_max=-10**7, tau_min, a=0.03,b=0.13
+    real(kind=rk) :: lnL_partial, pk, dx, lnL_max=-10**7, tau_max, a=0.03,b=0.12
 
     open(unit=8, file='maxlike.txt', action='write')
 
@@ -80,12 +81,34 @@ contains
 
       if (lnL(i).gt.lnL_max) then
         lnL_max  = lnL(i)
-        tau_min = tau_test(i)
+        tau_max = tau_test(i)
       end if
 
       write(8,*) tau_test(i), lnL(i)
     end do
-    PRINT*, 'MML', tau_min
+    PRINT*, 'MML', tau_max
+    call find_errorMML(tau_test,lnL,step,lnL_max,tau_max)
   end subroutine MML
+
+
+  subroutine find_errorMML(tau_test,lnL,step,lnL_max,tau_max)
+    implicit none
+    integer :: step, i
+    real(kind=rk) :: lnL_max, sigma_dx, sigma_sx, tau_max, diff_sx=0.1_rk, diff_dx=0.1_rk
+    real(kind=rk), dimension(step) :: lnL, tau_test
+
+    do i=1,step
+      if (tau_test(i).lt.tau_max .and. abs(lnL_max-0.5_rk-lnL(i)).le.diff_sx) then
+        sigma_sx = tau_test(i)
+        diff_sx=abs(lnL_max-0.5_rk-lnL(i))
+
+      else if (tau_test(i).gt.tau_max .and. abs(lnL_max-0.5_rk-lnL(i)).le.diff_dx) then
+        sigma_dx = tau_test(i)
+        diff_dx = abs(lnL_max-0.5_rk-lnL(i))
+      end if
+    end do
+
+  call plot_commands_MML(lnL_max,sigma_dx,sigma_sx,tau_max)
+  end subroutine find_errorMML
 
 end module maximum_likelihood
