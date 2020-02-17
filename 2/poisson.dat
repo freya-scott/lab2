@@ -1,0 +1,4 @@
+ set title 'Distribuzione di Poisson
+ set xlabel 'x'
+ set ylabel 'P(X=x)'
+ plot 'v=0.1' u 1:2 w l,'v=0.5' u 1:2 w l, 'v=1.0' u 1:2 w l, 'v=3.0' u 1:2 w l
