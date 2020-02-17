@@ -43,7 +43,6 @@ contains
         qmin = q
         tau_min = tau_test
       end if
-      print*,q
       write(3,*)  tau_test, q
     end do
     print*, tau_min, qmin
