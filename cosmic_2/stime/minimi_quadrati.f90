@@ -52,7 +52,6 @@ contains
       write(3,*)  tau_test(i), q(i)
     end do
 
-    print*, 'MMQ', tau_min
     call find_error(tau_test,q,step,qmin,tau_min)
   end subroutine MMQ
 
@@ -74,6 +73,7 @@ contains
     end do
 
   call plot_commands_q(qmin,sigma_dx,sigma_sx,tau_min)
+  print*, 'MMQ', tau_min, 'sigma_sx', tau_min-sigma_sx, 'sigma_dx', sigma_dx-tau_min
   end subroutine find_error
 
 end module minimi_quadrati

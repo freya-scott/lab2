@@ -86,8 +86,8 @@ contains
 
       write(8,*) tau_test(i), lnL(i)
     end do
-    PRINT*, 'MML', tau_max
     call find_errorMML(tau_test,lnL,step,lnL_max,tau_max)
+
   end subroutine MML
 
 
@@ -109,6 +109,7 @@ contains
     end do
 
   call plot_commands_MML(lnL_max,sigma_dx,sigma_sx,tau_max)
+  print*, 'MML', tau_max, 'sigma_sx', tau_max-sigma_sx, 'sigma_dx', sigma_dx-tau_max
   end subroutine find_errorMML
 
 end module maximum_likelihood

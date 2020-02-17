@@ -1,5 +1,6 @@
 module write
 use precisione
+use gnuplot
 implicit none
 contains
 
@@ -14,7 +15,7 @@ contains
       write(2,*) (x(i)+x(i+1))/2., nk(i), sqrt(real(nk(i)))
     end do
     close(unit=2)
-
+    call plot_commands_hist()
   end subroutine write_to_file
 
 
